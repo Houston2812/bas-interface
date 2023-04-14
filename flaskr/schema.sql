@@ -16,3 +16,13 @@ CREATE TABLE post (
   FOREIGN KEY (author_id) REFERENCES user (id)
 );
 
+
+CREATE TABLE scanner (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, 
+  auth_key TEXT NOT NULL,
+  org TEXT NOT NULL,
+  user_id INTEGER NOT NULL,
+  scanner_status INTEGER NOT NULL DEFAULT 0,
+  FOREIGN KEY (user_id) REFERENCES user (id)
+)
+

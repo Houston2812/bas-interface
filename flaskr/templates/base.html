@@ -1,6 +1,39 @@
 <!doctype html>
 <title>{% block title %}{% endblock %} - Flaskr</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
+
+<script>
+ 
+  function get_key(){
+      // fetch("http://0.0.0.0:5000/scanner/key")
+      //     .then(response => response.json())
+      //     .then(auth_key => {
+      //         console.log(auth_key)
+      //     })
+      // .catch(err => console.log(err))
+      $.ajaxSetup({
+        type: "POST",
+        data: {},
+        dataType: 'json',
+        xhrFields: {
+           withCredentials: true
+        },
+        crossDomain: true,
+        contentType: 'application/json; charset=utf-8'
+      });
+
+      $.ajax({
+            type: "GET",
+            url: "http://0.0.0.0:5000/scanner/key",
+            success: function (data) { 
+                console.log(data['auth_key'])
+                document.getElementById("key").innerHTML = data['auth_key']
+          },
+        });                
+
+  }
+</script>  
 <nav>
   <h1>Flaskr</h1>
   <ul>

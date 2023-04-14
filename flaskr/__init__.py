@@ -1,11 +1,13 @@
 import os
 
 from flask import Flask
+from flask_cors import CORS, cross_origin
 
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    cors = CORS(app, resources={r"/scanner/get_auth_key": {"origins": "http://localhost:5000"}})
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
@@ -38,6 +40,10 @@ def create_app(test_config=None):
 
     from . import blog
     app.register_blueprint(blog.bp)
+
+    from . import scanner
+    app.register_blueprint(scanner.bp, url_prefix='/scanner')
+    
     app.add_url_rule('/', endpoint='index')
 
     return app
