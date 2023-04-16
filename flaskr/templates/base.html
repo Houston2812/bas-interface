@@ -1,57 +1,106 @@
-<!doctype html>
+  <!doctype html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}{% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 
 <script>
  
   function get_key(){
-      // fetch("http://0.0.0.0:5000/scanner/key")
-      //     .then(response => response.json())
-      //     .then(auth_key => {
-      //         console.log(auth_key)
-      //     })
-      // .catch(err => console.log(err))
-      $.ajaxSetup({
-        type: "POST",
-        data: {},
-        dataType: 'json',
-        xhrFields: {
-           withCredentials: true
-        },
-        crossDomain: true,
-        contentType: 'application/json; charset=utf-8'
-      });
-
-      $.ajax({
-            type: "GET",
-            url: "http://0.0.0.0:5000/scanner/key",
-            success: function (data) { 
-                console.log(data['auth_key'])
-                document.getElementById("key").innerHTML = data['auth_key']
-          },
-        });                
-
+    console.log('Changed the visibility')
+    let key = document.getElementById("key").innerHTML
+    console.log(key)
+    alert("Authentication Key: " + key)
   }
 </script>  
-<nav>
-  <h1>Flaskr</h1>
-  <ul>
-    {% if g.user %}
-      <li><span>{{ g.user['username'] }}</span>
-      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
-    {% else %}
-      <li><a href="{{ url_for('auth.register') }}">Register</a>
-      <li><a href="{{ url_for('auth.login') }}">Log In</a>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <img class="is-rounded"  src=" {{ url_for('static', filename='logo_transparent-crop.png') }} " width="70" height="28">
+  </div>
+
+  {% if g.user %}
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" href="{{ url_for('scanner.index') }}">
+        Scanner
+      </a>
+
+      <a class="navbar-item" href="{{ url_for('scanner.add') }}">
+        Add Scanner
+      </a>
+
+      <a class="navbar-item" href="{{ url_for('scanner.scan') }}">
+        Run Scan 
+      </a>
+
+    </div>
     {% endif %}
-  </ul>
+
+    <div class="navbar-end">
+      <div class="navbar-item">
+        {% if g.user %}
+        <div class="buttons" > 
+          <button class="button is-info" style="margin-right: 20px;" onclick="get_key()">
+           Authentication Key 
+          </button>
+
+          {% if g.scanner_status == "Connected" %}
+          <p class="button is-success" style="margin-right: 10px;">
+            Connected
+          </p>
+          {% else %}
+          <p class="button is-danger" style="margin-right: 10px;">
+            Disconnected
+          </p>
+          {% endif %}
+          {% endif %}
+
+          {% if not g.user %}
+          <a class="button is-primary" style="margin-right: 10px;" href="{{ url_for('auth.register') }}">
+            <strong>Sign up</strong>
+          </a>
+          <a class="button is-light" href="{{ url_for('auth.login') }}">
+            Log in
+          </a>
+          {% elif g.user %}
+          <p class="navbar-item">
+            <button class=" button is-primary" style="margin-right: 10px;">{{ g.user['username'] }}</button>
+          </p>
+          <a class="button is-light" href="{{ url_for('auth.logout') }}">Log Out</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
 </nav>
+
 <section class="content">
   <header>
     {% block header %}{% endblock %}
   </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
+  {% for category, message in get_flashed_messages(with_categories=true)  %}
+  <div class="columns is-mobile is-centered">
+    <div class="column is-narrow">
+      {% if category == "error" %}
+      <div class="box is-warning" style="background-color: hsl(48, 100%, 67%); color: rgba(0, 0, 0, 0.7);">
+        <p class="is-warning" >
+          {{ message }}
+        </p>
+      </div>
+      {% endif %}
+
+      {% if category == "success" %}
+      <div class="box is-warning" style="background-color: hsl(141, 53%, 53%); color: #fff">
+        <p class="is-success" >
+          {{ message }}
+        </p>
+      </div>
+      {% endif %}
+      
+    
+    </div>
+  </div>
   {% endfor %}
   {% block content %}{% endblock %}
 </section>

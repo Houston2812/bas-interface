@@ -1,15 +1,57 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}New Scanner{% endblock %}</h1>
+<div class="columns is-mobile is-centered">
+  <div class="column is-narrow">
+      <h1>{% block title %}New scanner{% endblock %}</h1>
+    </div>
+  </div>
 {% endblock %}
 
 {% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" value="{{ request.form['username'] }}" required>
-    <label for="organization">Organization</label>
-    <input name="organization" id="organization" value="{{ request.form['organization'] }}" required>
-    <input type="submit" value="Save">
-  </form>
+
+<div class="columns is-mobile is-centered">
+  <div class="column is-half">
+    <form method="post">
+    
+      <div class="field">
+        <label class="label">Username</label>
+        <div class="control has-icons-left has-icons-right">
+          <input class="input" name="username" id="username" value="{{ request.form['username'] }}" required>
+          <span class="icon is-small is-left">
+            <i class="fas fa-user"></i>
+          </span>
+          <span class="icon is-small is-right">
+            <i class="fas fa-check"></i>
+          </span>
+        </div>
+      </div>
+    
+      <div class="field">
+        <label class="label">Organization</label>
+        <div class="control has-icons-left has-icons-right">
+          <input class="input" name="organization" id="organization" value="{{ request.form['organization'] }}" required>
+          <span class="icon is-small is-left">
+            <i class="fas fa-user"></i>
+          </span>
+          <span class="icon is-small is-right">
+            <i class="fas fa-check"></i>
+          </span>
+        </div>
+      </div>
+    
+    
+      <div class="field is-grouped">
+        <div class="control">
+          <button class="button is-link">Add</button>
+        </div>
+        <div class="control">
+          <a class="button is-link is-light" href="{{ url_for('scanner.index') }}">Cancel</a >
+        </div>
+      </div>
+    
+    </form>
+  </div>
+</div>
+
 {% endblock %}

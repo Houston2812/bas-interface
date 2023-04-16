@@ -1,15 +1,58 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Log In{% endblock %}</h1>
+  <div class="columns is-mobile is-centered">
+    <div class="column is-narrow">
+        <h1>{% block title %}Log In{% endblock %}</h1>
+      </div>
+    </div>
 {% endblock %}
-
+  
 {% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Log In">
-  </form>
+
+
+<div class="columns is-mobile is-centered">
+    <div class="column is-half">
+      <form method="post">
+      
+        <div class="field">
+          <label class="label">Username</label>
+          <div class="control has-icons-left has-icons-right">
+            <input class="input" name="username" type="text" placeholder="username" id="username" required>
+            <span class="icon is-small is-left">
+              <i class="fas fa-user"></i>
+            </span>
+            <span class="icon is-small is-right">
+              <i class="fas fa-check"></i>
+            </span>
+          </div>
+        </div>
+      
+        <div class="field">
+          <label class="label">Password</label>
+          <div class="control has-icons-left has-icons-right">
+            <input class="input" name="password" type="password" placeholder="password" id="password" required> 
+            <span class="icon is-small is-left">
+              <i class="fas fa-user"></i>
+            </span>
+            <span class="icon is-small is-right">
+              <i class="fas fa-check"></i>
+            </span>
+          </div>
+        </div>
+      
+      
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-link">Log In</button>
+          </div>
+          <div class="control">
+            <a class="button is-link is-light" href="{{ url_for('blog.index') }}">Cancel</a>
+          </div>
+        </div>
+      
+      </form>
+    </div>
+</div>
+
 {% endblock %}

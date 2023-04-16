@@ -1,43 +1,20 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Scanners{% endblock %}</h1>
-  {% if g.user %}
-    <a class="action" href="{{ url_for('scanner.add') }}">Add scanner</a>
-  {% endif %}
-  {% if g.user %}
-    <a class="action" href="{{ url_for('scanner.scan') }}">Run scan</a>
-  {% endif %}
+<div class="columns is-mobile is-centered">
+  <div class="column is-narrow">
+    <h1>{% block title %}Scan results{% endblock %}</h1>
+
+  </div>
+</div>
 {% endblock %}
 
 {% block content %}
 
-    <div>
-
-            <h1>
-                Scanner status
-            </h1>
-            
-            {% if status == 0 %}
-            <span style="color: red">
-                Disconnected
-            </span>
-            {% elif status == 1 %}
-            <span style="color: green">
-                Connected
-            </span>
-            {% endif %}
-
-
-    </div>
-
-    <div>
-        <button onclick="return get_key();">
-            Auth Key
-        </button>
-        <p id="key">
-            Key: 
-        </p>
-    </div>
+<div class="columns is-mobile is-centered">
+  <div class="column is-half">
+      <span id="key" style="visibility: hidden" >{{ key }}</span>
+  </div>
+</div>
 {% endblock %}
 
