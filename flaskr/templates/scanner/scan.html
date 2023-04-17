@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <div class="columns is-mobile is-centered">
+    <div class="column is-narrow">
+        <h1>{% block title %}Run scan{% endblock %}</h1>
+      </div>
+    </div>
+{% endblock %}
+  
+{% block content %}
+
+
+<div class="columns is-mobile is-centered">
+    <div class="column is-narrow">
+      <form method="post">
+        <div class="field is-grouped" >
+            <div class="field " style="margin-right: 30px;">
+              <label class="label">Scan category</label>
+              <div class="control">
+                <div class="select">
+                  <select name="scan_category"> 
+                    <option>Directory Traversal</option>
+                    <option>SQL Injection</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="field " style="margin-right: 30px;">
+                <label class="label">Scan type</label>
+                <div class="control">
+                  <div class="select">
+                    <select name="scan_type" >
+                      <option>Full</option>
+                      <option>Basic</option>
+                      <option>Short</option>
+                    </select>
+                  </div>
+                </div>
+            </div>
+            
+            <div class="field ">
+                <label class="label">Scan speed</label>
+                <div class="control">
+                  <div class="select">
+                    <select name="scan_speed">
+                      <option>Slow</option>
+                      <option>Normal</option>
+                      <option>Fast</option>
+                    </select>
+                  </div>
+                </div>
+            </div>
+              
+        </div>
+         
+          <div class="field is-grouped">
+            <div class="control">
+              <button class="button is-link">Submit</button>
+            </div>
+            <div class="control">
+              <button class="button is-link is-light">Cancel</button>
+            </div>
+          </div>
+      
+      </form>
+    </div>
+</div>
+
+{% endblock %}

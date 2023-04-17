@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<div class="columns is-mobile is-centered">
+  <div class="column is-narrow">
+    <h1>{% block title %}Report{% endblock %}</h1>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<span id="key" style="visibility: hidden" >{{ key }}</span>
+
+<div class="columns is-mobile is-centered">
+  <div class="column is-half">
+    <article class="panel is-info">
+    <div class="level panel-heading">
+     
+        <p style="margin-top: 10px; margin-bottom: 5px;">
+            Details
+        </p>
+        <p>
+            <a class="button is-rounded is-danger"  href="{{ url_for('scanner.delete_report', scan_id=scan_id ) }}">Delete</a>
+
+        </p>
+      
+    </div>
+     
+     
+    <table class="table is-striped is-bordered  " >
+                <thead class="is-info" style="background-color: hsl(204, 86%, 53%);">
+                    <tr>
+                        <th> <abbr title="Payload" style="color: #fff"> Payload</abbr> </th>
+                        <th> <abbr title="Status" style="color: #fff">  Status </abbr> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if reports|length > 0 %}
+                        {% for report, status in reports %}
+                        <tr>
+                            <th> {{ report }} </th>
+                            {% if status == "bypassed" %}
+                                <th style="color: green;"> {{ status }} </th>
+                            {% endif %}
+                            {% if status == "blocked" %}
+                                <th style="color: crimson;"> {{ status }} </th>
+
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+    </article>
+  </div>
+</div>
+{% endblock %}
+

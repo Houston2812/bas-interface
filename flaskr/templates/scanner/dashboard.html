@@ -10,10 +10,62 @@
 {% endblock %}
 
 {% block content %}
+<span id="key" style="visibility: hidden" >{{ key }}</span>
 
 <div class="columns is-mobile is-centered">
   <div class="column is-half">
-      <span id="key" style="visibility: hidden" >{{ key }}</span>
+    <article class="panel is-info">
+    <div class="level panel-heading">
+      <div class="level-left">
+        <div class="level-item">
+          <p >
+            Scans
+          </p>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <a class="button is-danger is-rounded"  href="{{ url_for('scanner.clean') }}">
+            Clean
+          </a>
+
+        </div>
+      </div>
+    </div>
+      <p class="panel-tabs">
+        <a class="is-active">All</a>
+        <a>Finished</a>
+      </p>
+      <!-- <div class="panel-block">
+        <p class="control has-icons-left">
+          <input class="input is-info" type="text" placeholder="Search">
+          <span class="icon is-left">
+            <i class="fas fa-search" aria-hidden="true"></i>
+          </span>
+        </p>
+      </div> -->
+
+      {% if scans|length > 0 %}
+        {% for scan in scans %}
+        <div class="level" >
+          <div class="level-left">
+            <span class="panel-icon">
+              <i class="fas fa-book" aria-hidden="true"></i>
+            </span>
+            {{ scan['id'] }}
+          </div>
+          
+          <div class="level-right">
+
+            <a class="button is-rounded is-info" style="margin-bottom: 8px; margin-right: 10px;" href="{{ url_for('scanner.get_report', scan_id=scan['id'] ) }}">Details</a>
+          
+          </div>
+        </div>
+          <!-- <a class="panel-block is-active">        </a> -->
+
+        {% endfor %}
+      {% endif %}
+    </article>
   </div>
 </div>
 {% endblock %}
