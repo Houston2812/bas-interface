@@ -9,6 +9,7 @@
 {% endblock %}
   
 {% block content %}
+<span id="key" style="visibility: hidden" >{{ key }}</span>
 
 
 <div class="columns is-mobile is-centered">
@@ -22,6 +23,7 @@
                   <select name="scan_category"> 
                     <option>Directory Traversal</option>
                     <option>SQL Injection</option>
+                    <option>XSS</option>
                   </select>
                 </div>
               </div>

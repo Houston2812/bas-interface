@@ -3,7 +3,7 @@ import json
 from operator import methodcaller
 from tabnanny import check
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for, jsonify
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
 )
 from werkzeug.exceptions import abort
 import string
@@ -37,11 +37,12 @@ def index():
     elif scanner['scanner_status'] == 1:
         g.scanner_status = "Connected"
 
+    session['scanner_status'] = g.scanner_status
     print(g.key)
 
 
     scans_data = db.execute(
-        'SELECT id'
+        'SELECT id, scan_type'
         ' FROM scans'
         ' WHERE user_id = ? ',
         (g.user['id'], )
@@ -54,7 +55,9 @@ def index():
 
     if scanner:
         print(scanner['scanner_status'])
-        return render_template('scanner/dashboard.html', status=g.scanner_status, key=g.key, scans = scans_data  )
+        status = session.get('scanner_status') or "Disconnected"
+
+        return render_template('scanner/dashboard.html', status=status, key=g.key, scans = scans_data  )
     else:
         return render_template('scanner/dashboard.html', key=g.key, scans = scans_data)   
 
@@ -101,7 +104,15 @@ def add():
             flash(message, "success")
             
             return redirect(url_for('scanner.index'))
-    return render_template('scanner/add.html')    
+    status = session.get('scanner_status') or "Disconnected"
+    print(f"Scanner status: {status}")
+
+    key = get_auth_key()
+    if key is not None:
+        g.key = key
+    else:
+        g.key = "None"
+    return render_template('scanner/add.html', status=status, key=g.key)    
 
 @bp.route('/scan', methods=['GET', 'POST'])
 @login_required
@@ -125,10 +136,24 @@ def scan():
             scan_category = "DIRECTORY_TRAVERSAL"
         
         elif scan_category == "SQL Injection":
-            if scan_type == "Full":
+            if scan_type == "Basic":
+                scan_type = "SQL_INJECTION_BASIC"
+            elif scan_type == "Short":
+                scan_type = "SQL_INJECTION_SHORT"
+            elif scan_type == "Full":
                 scan_type = "SQL_INJECTION_FULL"
 
             scan_category = "SQL_INJECTION"
+
+        elif scan_category == "XSS":
+            if scan_type == "Basic":
+                scan_type = "XSS_BASIC"
+            elif scan_type == "Short":
+                scan_type = "XSS_SHORT"
+            elif scan_type == "Full":
+                scan_type = "XSS_FULL"
+
+            scan_category == "XSS"
 
         if scan_speed == "Slow":
             scan_speed = "SLOW"
@@ -158,8 +183,13 @@ def scan():
         db.close()
 
         return redirect(url_for('scanner.index'))
-    
-    return render_template('scanner/scan.html')    
+    status = session.get('scanner_status') or "Disconnected"
+    key = get_auth_key()
+    if key is not None:
+        g.key = key
+    else:
+        g.key = "None"
+    return render_template('scanner/scan.html', status=status, key=g.key    )    
 
 @bp.route('/scans', methods=['POST'])
 def scans():
@@ -298,20 +328,25 @@ def get_report(scan_id):
 
     # print(reports[0]['payload'])
 
-
-
-    return render_template('scanner/report.html', reports = reports, scan_id = scan_id)    
+    status = session.get('scanner_status') or "Disconnected"
+    key = get_auth_key()
+    if key is not None:
+        g.key = key
+    else:
+        g.key = "None"
+    return render_template('scanner/report.html', status = status, reports = reports, scan_id = scan_id ,key =g.key)    
 
 
 @bp.route('/report/delete/<scan_id>', methods=['GET'])
 def delete_report(scan_id):
     db = get_db()
 
+    print(f"Delete requested for {scan_id}")
     db.execute(
         'DELETE '
-        'FROM report '
-        'WHERE scan_id = ? and user_id = ?',
-        (scan_id, g.user['id'],)
+        'FROM scans '
+        'WHERE id = ? and user_id = ? ',
+        (scan_id, g.user['id'])
     )
 
     db.commit()

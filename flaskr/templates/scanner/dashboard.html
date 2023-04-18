@@ -34,7 +34,7 @@
     </div>
       <p class="panel-tabs">
         <a class="is-active">All</a>
-        <a>Finished</a>
+        <!-- <a>Finished</a> -->
       </p>
       <!-- <div class="panel-block">
         <p class="control has-icons-left">
@@ -52,11 +52,12 @@
             <span class="panel-icon">
               <i class="fas fa-book" aria-hidden="true"></i>
             </span>
-            {{ scan['id'] }}
+            {{ scan['id'] }} <span style="padding-left: 30px;">  {{ scan['scan_type'] }} </span>
           </div>
           
           <div class="level-right">
 
+            <a class="button is-rounded is-warning" style="margin-bottom: 8px; margin-right: 10px;" href="{{ url_for('scanner.delete_report', scan_id=scan['id'] ) }}">Delete</a>
             <a class="button is-rounded is-info" style="margin-bottom: 8px; margin-right: 10px;" href="{{ url_for('scanner.get_report', scan_id=scan['id'] ) }}">Details</a>
           
           </div>

@@ -1,6 +1,6 @@
   <!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{% block title %}{% endblock %} - Flaskr</title>
+<title>{% block title %}{% endblock %} - BAS</title>
 <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 
@@ -45,7 +45,7 @@
            Authentication Key 
           </button>
 
-          {% if g.scanner_status == "Connected" %}
+          {% if g.scanner_status == "Connected" or status == "Connected" %}
           <p class="button is-success" style="margin-right: 10px;">
             Connected
           </p>
