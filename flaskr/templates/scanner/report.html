@@ -18,7 +18,10 @@
     <div class="level panel-heading">
      
         <p style="margin-top: 10px; margin-bottom: 5px;">
-            Details
+            Details 
+        </p>
+        <p style="margin-top: 10px; margin-bottom: 5px;">
+            {{ time }}
         </p>
         <p>
             <a class="button is-rounded is-danger"  href="{{ url_for('scanner.delete_report', scan_id=scan_id ) }}">Delete</a>

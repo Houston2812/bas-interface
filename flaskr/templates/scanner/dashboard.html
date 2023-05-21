@@ -56,7 +56,7 @@
           </div>
           
           <div class="level-right">
-
+            <span style="padding-right: 160px;"> {{ scan['scan_speed'] }} </span>
             <a class="button is-rounded is-warning" style="margin-bottom: 8px; margin-right: 10px;" href="{{ url_for('scanner.delete_report', scan_id=scan['id'] ) }}">Delete</a>
             <a class="button is-rounded is-info" style="margin-bottom: 8px; margin-right: 10px;" href="{{ url_for('scanner.get_report', scan_id=scan['id'] ) }}">Details</a>
           

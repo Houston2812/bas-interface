@@ -42,7 +42,7 @@ def index():
 
 
     scans_data = db.execute(
-        'SELECT id, scan_type'
+        'SELECT id, scan_type, scan_speed'
         ' FROM scans'
         ' WHERE user_id = ? ',
         (g.user['id'], )
@@ -159,7 +159,7 @@ def scan():
             scan_speed = "SLOW"
         elif scan_speed == "Normal":
             scan_speed = "NORMAL"
-        elif scan_speed == "FAST":
+        elif scan_speed == "Fast":
             scan_speed = "FAST"
 
         auth_key = get_auth_key()
@@ -283,7 +283,8 @@ def report():
     key = data['key']
     scan_id = data['scan_id']
     user_id = get_user_id(key)
-    
+    time = data['time']
+
     report = json.loads(data['report'])
     print(f"Key: {key}; Scan_id = {scan_id}; Report:\n{report}")
     if user_id:
@@ -301,9 +302,9 @@ def report():
         for el in report:
 
             db.execute(
-                'INSERT INTO  report (user_id, scan_id, payload, status_)'
-                ' VALUES (?, ?, ?, ?)',
-                (user_id, scan_id, el['payload'], el['status'])
+                'INSERT INTO  report (user_id, scan_id, payload, status_, time)'
+                ' VALUES (?, ?, ?, ?, ?)',
+                (user_id, scan_id, el['payload'], el['status'], time)
             )
 
             db.commit()
@@ -326,6 +327,12 @@ def get_report(scan_id):
         (g.user['id'], scan_id, )
     ).fetchall()
 
+    time = db.execute(
+        'SELECT report.time '
+        ' FROM report '
+        ' WHERE user_id = ? AND scan_id = ?',
+        (g.user['id'], scan_id, )
+    ).fetchone()
     # print(reports[0]['payload'])
 
     status = session.get('scanner_status') or "Disconnected"
@@ -334,7 +341,7 @@ def get_report(scan_id):
         g.key = key
     else:
         g.key = "None"
-    return render_template('scanner/report.html', status = status, reports = reports, scan_id = scan_id ,key =g.key)    
+    return render_template('scanner/report.html', status = status, reports = reports, scan_id = scan_id, time=time[0][:5], key =g.key)    
 
 
 @bp.route('/report/delete/<scan_id>', methods=['GET'])

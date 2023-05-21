@@ -44,6 +44,7 @@ CREATE TABLE report (
   scan_id INTEGER NOT NULL,
   payload TEXT NOT NULL,
   status_ TEXT NOT NULL,
+  time TEXT NOT NULL, 
   FOREIGN KEY (user_id) REFERENCES user (id),
   FOREIGN KEY (scan_id) REFERENCES scans (id)
 )
